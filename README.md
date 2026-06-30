@@ -61,9 +61,11 @@ fixtures) is the scaffolding you'll extend.
 
 ## Quick start
 
-Runs on **Windows, macOS, and Linux**. Needs Git, Python 3.10+, and Node.js 18+.
-Full prerequisites and per-OS instructions are in **[SETUP.md](SETUP.md)**.
-Prefer a visual guide? Open **[instructions.html](instructions.html)** in a browser.
+Runs on **Windows, macOS, and Linux**. Needs Git and Python 3.10+; **Node.js 18+
+is installed automatically** by the installer if it's missing (winget/choco on
+Windows, Homebrew on macOS, apt/dnf on Linux). Full prerequisites and per-OS
+instructions are in **[SETUP.md](SETUP.md)**. Prefer a visual guide? Open
+**[instructions.html](instructions.html)** in a browser.
 
 One cross-platform installer (only needs Python 3.10+) sets up **both** stacks
 — venv + pytest + Playwright (Python) and npm + Playwright (TypeScript), browsers
@@ -74,8 +76,9 @@ python install.py        # Windows
 python3 install.py       # macOS / Linux
 ```
 
-Flags: `--python-only`, `--ts-only`, `--all-browsers`. OS-native wrappers
-`./setup.ps1` (Windows) and `bash setup.sh` (macOS/Linux) do the same thing.
+Flags: `--python-only`, `--ts-only`, `--all-browsers`, `--skip-node`. OS-native
+wrappers `./setup.ps1` (Windows) and `bash setup.sh` (macOS/Linux) do the same
+thing, including auto-installing Node.js.
 
 Then run the suites:
 

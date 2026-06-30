@@ -1,8 +1,10 @@
 # Setup & installation (Windows / macOS / Linux)
 
-This repo runs on any OS. You need **Git**, **Python 3.10+**, and **Node.js 18+**
-(tested with Python 3.13 and Node 22). Each stack installs its own dependencies
-and its own Playwright browser binaries.
+This repo runs on any OS. You need **Git** and **Python 3.10+** (tested with
+Python 3.13 and Node 22). **Node.js 18+** is also required for the TypeScript
+stack, but the one-command installers below **install it automatically** if it's
+missing (via winget/choco on Windows, Homebrew on macOS, apt/dnf on Linux). Each
+stack installs its own dependencies and Playwright browser binaries.
 
 ## 1. Prerequisites
 
@@ -48,9 +50,12 @@ for each stack.
 Useful flags:
 - `--python-only` / `--ts-only` — set up just one stack
 - `--all-browsers` — install every Playwright browser (not only Chromium)
+- `--skip-node` — don't auto-install Node.js (skip the TS stack if it's missing)
 
-If Node.js isn't installed, the script sets up the Python stack and tells you how
-to add the TypeScript stack later.
+**Node.js is auto-installed** if missing. On Windows this uses `winget` (or
+`choco`); if neither exists, install Node from https://nodejs.org and re-run.
+After a fresh Node install you may need to open a **new terminal** (so `PATH`
+updates) and re-run with `--ts-only`.
 
 ### OS-native wrappers (optional)
 

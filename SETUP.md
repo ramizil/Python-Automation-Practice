@@ -33,14 +33,30 @@ npm --version
 
 ## 2. One-command setup
 
-From the repo root:
+From the repo root, the **single cross-platform installer** works the same on
+every OS (it only needs Python 3.10+, which you already installed above):
 
+```bash
+python install.py        # Windows
+python3 install.py       # macOS / Linux
+```
+
+It sets up **both** stacks: creates the Python venv + installs `requirements.txt`
+(pytest, playwright, ...), runs `npm install`, and downloads the Chromium browser
+for each stack.
+
+Useful flags:
+- `--python-only` / `--ts-only` — set up just one stack
+- `--all-browsers` — install every Playwright browser (not only Chromium)
+
+If Node.js isn't installed, the script sets up the Python stack and tells you how
+to add the TypeScript stack later.
+
+### OS-native wrappers (optional)
+
+If you prefer a shell script, these do the same thing:
 - **Windows (PowerShell):** `./setup.ps1`
 - **macOS / Linux:** `bash setup.sh`
-
-Each script sets up **both** stacks: creates the Python venv + installs
-`requirements.txt`, runs `npm install`, and downloads the Chromium browser for
-each stack.
 
 ## 3. Manual setup (if you prefer)
 

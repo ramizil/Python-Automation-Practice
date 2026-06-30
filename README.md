@@ -64,12 +64,17 @@ Runs on **Windows, macOS, and Linux**. Needs Git, Python 3.10+, and Node.js 18+.
 Full prerequisites and per-OS instructions are in **[SETUP.md](SETUP.md)**.
 Prefer a visual guide? Open **[instructions.html](instructions.html)** in a browser.
 
-One-command setup of both stacks from the repo root:
+One cross-platform installer (only needs Python 3.10+) sets up **both** stacks
+— venv + pytest + Playwright (Python) and npm + Playwright (TypeScript), browsers
+included — from the repo root:
 
 ```bash
-./setup.ps1        # Windows (PowerShell)
-bash setup.sh      # macOS / Linux
+python install.py        # Windows
+python3 install.py       # macOS / Linux
 ```
+
+Flags: `--python-only`, `--ts-only`, `--all-browsers`. OS-native wrappers
+`./setup.ps1` (Windows) and `bash setup.sh` (macOS/Linux) do the same thing.
 
 Then run the suites:
 

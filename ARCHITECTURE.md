@@ -50,10 +50,14 @@ Product-agnostic plumbing every product reuses:
 
 ## Layer 2 — Business steps (`framework/products/<product>/`, `src/products/<product>/`)
 One package **per product** (the analog of ordering / billing / customer
-services). Each contains:
-- **pages/** — page objects: locators + atomic interactions (the interaction
-  primitives). *In this repo the SauceDemo page objects already live in
-  `framework/pages` / `src/pages`; the steps layer composes them.*
+services). The **Parabank** product (topic 11 capstone) is the fully
+self-contained example: `products/parabank/` holds its own `pages`, a
+`ParabankApiClient` (extends the Layer-1 `BaseApiClient`), `steps`, and a `data`
+factory. Each product package contains:
+- **pages** — page objects: locators + atomic interactions (the interaction
+  primitives). *For SauceDemo the page objects already live in `framework/pages`
+  / `src/pages` and the steps layer composes them; Parabank keeps its own pages
+  inside its product package — the cleaner greenfield layout.*
 - **client** — a product API client extending `BaseApiClient`
   (e.g. `BookerApiClient`).
 - **steps** — **business workflows** that read like product actions

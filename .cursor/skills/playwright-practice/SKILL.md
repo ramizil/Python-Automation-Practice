@@ -14,10 +14,8 @@ A learning repo with **two mirrored stacks** teaching the same automation topics
 - `python-playwright/` — pytest + `pytest-playwright`
 - `ts-playwright/` — `@playwright/test`
 
-Topics 01–08, 10, and 12 are complete (worked example + exercise skeleton +
-solution); **09 (hybrid) and 11 (Parabank capstone) are still `EXERCISE.md`
-stubs** to flesh out. Always implement a topic in **both** stacks to keep them
-mirrored.
+**All topics 01–12 are complete** (worked example + exercise skeleton +
+solution). Always implement changes in **both** stacks to keep them mirrored.
 
 Reusable framework pieces added for the newer topics:
 - `framework/schemas/booking.py` / `src/schemas/booking.ts` (JSON Schema +
@@ -30,6 +28,20 @@ Reusable framework pieces added for the newer topics:
   `saucedemo` steps, `booker` client+steps). Tests in `tests/*layered*` are
   Layer 3. The flat topics 01–08 are intentionally NOT refactored — topic 12 is
   the layered showcase. See root `ARCHITECTURE.md`.
+- **Parabank capstone (topic 11) + hybrid (topic 09)** — fully self-contained
+  product `framework/products/parabank/` & `src/products/parabank/` (pages,
+  `ParabankApiClient` on `BaseApiClient`, steps, `data` factory). Fixtures
+  `parabank_request` / `parabankRequest` and `parabank_user` / `parabankUser`
+  (registers a unique user per run). Worked tests in `tests/capstone/`. Parabank
+  schemas in `framework/schemas/parabank.py`.
+  - **Gotcha:** the API context base_url MUST end with a trailing slash
+    (`.../services/bank/`) and client paths must NOT start with `/`, or the
+    `/parabank/services/bank` prefix is dropped on URL-join.
+  - **Gotcha:** Parabank fills dropdowns/overview rows via JS after load — wait
+    for `option`/row `state="attached"` before selecting (page objects do this).
+  - Parabank is an external public demo (flaky): tag `capstone`/`slow` (Python
+    markers) and `@capstone`/`@slow` (TS title tags). Excluded from CI/fast runs
+    via `pytest -m "not capstone"` and `--grep-invert "@capstone"`.
 
 ## Targets (free public demo sites)
 - SauceDemo `https://www.saucedemo.com` — UI store (login/cart/checkout)
@@ -66,14 +78,16 @@ Reusable framework pieces added for the newer topics:
 Python:
 ```bash
 cd python-playwright
-.venv\Scripts\python.exe -m pytest tests -q          # reference suite must be green
+.venv\Scripts\python.exe -m pytest tests -m "not capstone" -q   # fast reference suite
 .venv\Scripts\python.exe -m pytest exercises/06_api_basics/solution   # spot-check a solution
+.venv\Scripts\python.exe -m pytest tests -m capstone            # capstone vs live Parabank
 ```
 TypeScript:
 ```bash
 cd ts-playwright
-npx playwright test --reporter=list                   # reference suite must be green
+npx playwright test --grep-invert "@capstone" --reporter=list   # fast reference suite
 npx playwright test -c playwright.exercises.config.ts 06_api_basics/solution
+npx playwright test tests/capstone                              # capstone vs live Parabank
 ```
 First-time setup if `.venv`/`node_modules` are missing: run `python install.py`
 from the repo root (cross-platform, both stacks), or the `./setup.ps1` /
@@ -89,8 +103,9 @@ cd python-playwright
 Install these with `pip install -r requirements-dev.txt`. Keep `framework/`
 ruff- and mypy-clean when you edit it.
 
-Expected baseline: **23 reference tests pass per stack** (8 API + 15 UI).
-Solutions pass; skeletons fail with a `TODO` until implemented.
+Expected baseline: **23 fast reference tests pass per stack** (8 API + 15 UI),
+plus **1 capstone** test (excluded from the fast run). Solutions pass; skeletons
+fail with a `TODO` until implemented.
 
 ## Adding a new topic / fleshing a stub
 
@@ -113,16 +128,9 @@ case, and tick the status table in the **root `README.md`**.
 `EXERCISE.md` format: `# Exercise NN — Title`, then **Goal**, **Target**,
 **Steps** (numbered), **Hints**, **Run it** (exact command), **Done when**.
 
-### Remaining stubs and their key APIs
-- **09 hybrid**: seed via the `booker` API client/fixture, assert in UI; tear
-  down in a fixture (`yield`/`use` then delete). Note: SauceDemo has no API and
-  restful-booker has no UI, so a true same-data UI+API flow needs Parabank — for
-  09 teach the **fixture seed/teardown pattern** (create-by-API, assert, delete
-  in teardown), or fold it into the capstone.
-- **11 capstone (Parabank)**: page objects `RegisterPage`, `LoginPage`,
-  `AccountsOverviewPage`, `OpenAccountPage`, `TransferFundsPage` + a REST client;
-  fixture that registers a unique user per run; verify account/transfer via UI
-  **and** the `/services/bank/...` REST API.
+All 12 topics are implemented. Future work would be *new* topics (13+): e.g.
+`storage_state` auth reuse, visual/a11y testing, Faker data factories, or a
+flaky-test/retry lesson — mirror both stacks and follow the layout above.
 
 ## Conventions
 - Selectors live in page objects (`framework/pages/`, `src/pages/`); credentials

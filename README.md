@@ -54,9 +54,9 @@ fixtures) is the scaffolding you'll extend.
 | 06 | API testing basics (auth + CRUD) | restful-booker | ✅ ready |
 | 07 | API schema / contract validation | restful-booker | ✅ ready |
 | 08 | Network mocking & interception | DummyJSON | ✅ ready |
-| 09 | Hybrid UI + API (seed then verify) | restful-booker + UI | 🔜 stub |
+| 09 | Hybrid UI + API (seed then verify) | Parabank (in capstone) | ✅ ready |
 | 10 | Reporting, quality gates & CI | both | ✅ ready |
-| 11 | Capstone: bank flow end-to-end | Parabank | 🔜 stub |
+| 11 | Capstone: bank flow end-to-end | Parabank | ✅ ready |
 | 12 | Layered framework architecture | SauceDemo + restful-booker | ✅ ready |
 
 ## Quick start
@@ -128,6 +128,25 @@ pip install pre-commit && pre-commit install
 - `.pre-commit-config.yaml` — git hooks
 - `.github/workflows/ci.yml` — runs **lint**, **python-tests**, and **ts-tests**
   on every push/PR and uploads reports as artifacts
+
+## Capstone (topic 11) + hybrid pattern (topic 09)
+
+The **Parabank capstone** ties everything together: a fully self-contained
+product package (`products/parabank/` — pages, `ParabankApiClient` on the shared
+`BaseApiClient`, and `ParabankSteps`), a fixture that **registers a unique user
+per run**, and the **hybrid pattern** — drive an action in the UI (open account,
+transfer funds) and verify it via the REST API (and schema-validate the
+responses). Parabank is a public demo bank that can be slow/reset, so the
+capstone is tagged `capstone`/`slow` and excluded from the fast/CI run:
+
+```bash
+# fast run (no external bank)
+pytest tests -m "not capstone"                 # Python
+npx playwright test --grep-invert "@capstone"  # TypeScript
+# run the capstone explicitly
+pytest tests -m capstone                       # Python
+npx playwright test tests/capstone             # TypeScript
+```
 
 ## Framework architecture (topic 12)
 

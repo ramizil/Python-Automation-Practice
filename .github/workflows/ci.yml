@@ -41,7 +41,9 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements-dev.txt
       - run: python -m playwright install --with-deps chromium
-      - run: pytest tests --html=report.html --self-contained-html
+        # The Parabank capstone hits an external public demo (flaky); exclude it
+        # from the gating run. Run it locally with: pytest tests -m capstone
+      - run: pytest tests -m "not capstone" --html=report.html --self-contained-html
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -64,7 +66,8 @@ jobs:
           cache-dependency-path: ts-playwright/package-lock.json
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test
+        # Exclude the external Parabank capstone from the gating run.
+      - run: npx playwright test --grep-invert "@capstone"
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

@@ -1,0 +1,34 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.cache/
+*.egg-info/
+
+# ---- Node / TypeScript ----
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ---- Playwright ----
+test-results/
+playwright-report/
+playwright/.cache/
+blob-report/
+.last-run.json
+allure-results/
+allure-report/
+
+# ---- Env / secrets ----
+.env
+.env.*
+!.env.example
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

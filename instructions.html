@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Playwright Automation Practice — Course Guide</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --panel2: #1c2330; --border: #2a3340;
+    --text: #e6edf3; --muted: #9aa7b5; --accent: #58a6ff; --py: #ffd343;
+    --ts: #3178c6; --green: #3fb950; --yellow: #d29922; --red: #f85149;
+    --code: #0b1020;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  header {
+    padding: 48px 24px; text-align: center;
+    background: radial-gradient(1200px 400px at 50% -10%, #1f6feb33, transparent),
+                linear-gradient(180deg, #11161d, #0d1117);
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 8px; font-size: 2.1rem; }
+  header p { margin: 0 auto; max-width: 720px; color: var(--muted); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+  h2 { border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 40px; }
+  a { color: var(--accent); }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: .72rem;
+          font-weight: 600; vertical-align: middle; }
+  .pill.py { background: #3a2f05; color: var(--py); border: 1px solid #6b5a12; }
+  .pill.ts { background: #0d2440; color: #79b8ff; border: 1px solid #1f4f86; }
+  .pill.ready { background: #0f2e1a; color: var(--green); border: 1px solid #1f6f37; }
+  .pill.stub { background: #2e2406; color: var(--yellow); border: 1px solid #6b5512; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+  code, pre { font-family: "SF Mono", Consolas, "Roboto Mono", monospace; }
+  code { background: var(--code); padding: 2px 6px; border-radius: 5px; font-size: .85em; }
+  pre { background: var(--code); border: 1px solid var(--border); border-radius: 8px;
+        padding: 14px 16px; overflow-x: auto; font-size: .82rem; }
+  pre code { background: none; padding: 0; }
+  .cards { display: grid; gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+          overflow: hidden; }
+  .card > summary { cursor: pointer; list-style: none; padding: 16px 20px;
+          display: flex; align-items: center; gap: 12px; }
+  .card > summary::-webkit-details-marker { display: none; }
+  .card > summary:hover { background: var(--panel2); }
+  .num { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums;
+         min-width: 26px; }
+  .ctitle { font-weight: 600; flex: 1; }
+  .cbody { padding: 4px 20px 20px; border-top: 1px solid var(--border); color: var(--muted); }
+  .cbody h4 { color: var(--text); margin: 16px 0 6px; font-size: .9rem; text-transform: uppercase;
+              letter-spacing: .04em; }
+  .cbody ol, .cbody ul { margin: 6px 0; padding-left: 20px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+  .tag { font-size: .72rem; font-weight: 700; letter-spacing: .05em; }
+  .tag.py { color: var(--py); } .tag.ts { color: #79b8ff; }
+  .note { background: #1a2230; border-left: 3px solid var(--accent); border-radius: 6px;
+          padding: 12px 16px; margin: 16px 0; color: var(--text); }
+  .warn { border-left-color: var(--yellow); }
+  footer { text-align: center; color: var(--muted); padding: 32px; border-top: 1px solid var(--border);
+           margin-top: 48px; font-size: .85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Playwright Automation Practice</h1>
+  <p>Build UI + API test frameworks from scratch — the same way in
+     <span class="pill py">Python · pytest</span>
+     <span class="pill ts">TypeScript · @playwright/test</span></p>
+</header>
+
+<div class="wrap">
+
+  <h2>What you'll build</h2>
+  <p>Two mirrored frameworks that test a frontend UI and a backend API (including
+     mocks), against free public demo apps. Each topic has a <strong>worked
+     reference example</strong> plus a <strong>practice exercise</strong>
+     (skeleton with <code>TODO</code>s + a hidden solution). Do every topic in
+     both languages to compare the idioms.</p>
+
+  <h2>Target applications</h2>
+  <table>
+    <thead><tr><th>Purpose</th><th>App</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr><td>Dummy store (UI)</td><td>SauceDemo</td><td><a href="https://www.saucedemo.com">saucedemo.com</a></td></tr>
+      <tr><td>Clean REST API (auth + CRUD)</td><td>restful-booker</td><td><a href="https://restful-booker.herokuapp.com">restful-booker.herokuapp.com</a></td></tr>
+      <tr><td>Store API + mocking</td><td>DummyJSON</td><td><a href="https://dummyjson.com">dummyjson.com</a></td></tr>
+      <tr><td>Dummy bank (capstone)</td><td>Parabank</td><td><a href="https://parabank.parasoft.com">parabank.parasoft.com</a></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Setup (Windows / macOS / Linux)</h2>
+  <p>Needs Git, Python 3.10+, Node.js 18+. Full details in <code>SETUP.md</code>.
+     One command from the repo root sets up both stacks:</p>
+  <pre><code>./setup.ps1        # Windows (PowerShell)
+bash setup.sh      # macOS / Linux</code></pre>
+  <div class="grid2">
+    <div>
+      <p class="tag py">PYTHON</p>
+      <pre><code>cd python-playwright
+python -m venv .venv
+source .venv/bin/activate   # Win: .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+playwright install
+pytest                      # 14 reference tests</code></pre>
+    </div>
+    <div>
+      <p class="tag ts">TYPESCRIPT</p>
+      <pre><code>cd ts-playwright
+npm install
+npx playwright install
+npx playwright test         # 14 reference tests</code></pre>
+    </div>
+  </div>
+  <div class="note warn">
+    <strong>Corporate / proxy networks:</strong> if you hit
+    <em>"self-signed certificate in chain"</em>, it's already handled —
+    <code>IGNORE_HTTPS_ERRORS</code> defaults ON. Set
+    <code>IGNORE_HTTPS_ERRORS=false</code> to enforce real certificate checks.
+  </div>
+
+  <h2>How to work an exercise</h2>
+  <ol>
+    <li>Read the topic's worked example in <code>tests/</code> (run it first).</li>
+    <li>Open <code>exercises/NN_topic/EXERCISE.md</code> and implement the skeleton.</li>
+    <li>Run just that exercise (commands below) until it's green.</li>
+    <li>Compare against the reference <code>solution/</code>.</li>
+    <li>Repeat the topic in the <em>other</em> language.</li>
+  </ol>
+
+  <h2>Learning path</h2>
+  <div class="cards">
+
+    <details class="card" open>
+      <summary><span class="num">01</span><span class="ctitle">First test &amp; runner setup</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> SauceDemo. Get the runner working and write a first assertion.</p>
+        <h4>Steps</h4>
+        <ol><li>Open the base URL.</li><li>Assert the title is <code>Swag Labs</code>.</li><li>Assert <code>#login-button</code> is visible.</li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/01_first_test/test_first_test.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  01_first_test/first-test.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">02</span><span class="ctitle">Locators &amp; web-first assertions</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> SauceDemo. Drive the login form and assert different outcomes.</p>
+        <h4>Steps</h4>
+        <ol><li>Locked-out user → error contains <code>locked out</code>.</li><li>Empty fields → error contains <code>Username is required</code>.</li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/02_locators_assertions/test_login_states.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  02_locators_assertions/login-states.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">03</span><span class="ctitle">Page Object Model</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> SauceDemo. Build your own login page object, then use it.</p>
+        <h4>Steps</h4>
+        <ol><li>Complete the page object (locators, <code>open</code>, <code>login</code>).</li><li>Log in as the standard user; assert <code>.title</code> = <code>Products</code>.</li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/03_page_object_model/test_pom.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  03_page_object_model/pom.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">04</span><span class="ctitle">End-to-end checkout flow</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> SauceDemo. Buy two items end to end using the framework page objects.</p>
+        <h4>Steps</h4>
+        <ol><li>Log in; add two items; assert cart count is 2.</li><li>Check out, fill the form, finish.</li><li>Assert <code>Thank you for your order!</code></li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/04_e2e_checkout/test_checkout_two_items.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  04_e2e_checkout/checkout-two.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">05</span><span class="ctitle">Data-driven tests</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> SauceDemo. Run one test over a table of users.</p>
+        <h4>Steps</h4>
+        <ol><li>Parametrize / loop over all four users.</li><li>Assert <code>Products</code> for valid users; <code>locked out</code> error for the locked user.</li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/05_data_driven/test_users.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  05_data_driven/users.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">06</span><span class="ctitle">API testing basics (auth + CRUD)</span><span class="pill ready">ready</span></summary>
+      <div class="cbody">
+        <p><strong>Target:</strong> restful-booker. Test a REST API directly — no browser.</p>
+        <h4>Steps</h4>
+        <ol><li>Create a booking; assert 200 + echoed field.</li><li>Read it back.</li><li>Auth, then update; assert the change.</li><li>Delete (returns 201), then GET → 404.</li></ol>
+        <div class="grid2">
+          <div><p class="tag py">PYTHON</p><pre><code>pytest exercises/06_api_basics/test_booking_crud.py</code></pre></div>
+          <div><p class="tag ts">TYPESCRIPT</p><pre><code>npx playwright test -c playwright.exercises.config.ts \
+  06_api_basics/booking-crud.spec.ts</code></pre></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">07</span><span class="ctitle">API schema / contract validation</span><span class="pill stub">stub</span></summary>
+      <div class="cbody"><p><strong>Target:</strong> restful-booker. Assert the <em>shape</em> of responses (Python <code>jsonschema</code>; TS <code>zod</code>/<code>ajv</code>) to catch contract breaks.</p></div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">08</span><span class="ctitle">Network mocking &amp; interception</span><span class="pill stub">stub</span></summary>
+      <div class="cbody"><p><strong>Target:</strong> DummyJSON. Use <code>page.route()</code> to stub, fail, or modify backend responses behind a real UI, and assert edge-case states.</p></div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">09</span><span class="ctitle">Hybrid UI + API (seed then verify)</span><span class="pill stub">stub</span></summary>
+      <div class="cbody"><p>Seed state fast via the API, then verify behaviour through the UI; tear down via the API in a fixture.</p></div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">10</span><span class="ctitle">Reporting + GitHub Actions CI</span><span class="pill stub">stub</span></summary>
+      <div class="cbody"><p>HTML/Allure reports, traces &amp; screenshots on failure, and a workflow that installs browsers and runs the suite on push.</p></div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">11</span><span class="ctitle">Capstone: bank flow end-to-end</span><span class="pill stub">stub</span></summary>
+      <div class="cbody"><p><strong>Target:</strong> Parabank. Register, log in, open an account, transfer funds — verified via UI <em>and</em> REST API, with schema validation, a mock, and CI.</p></div>
+    </details>
+
+  </div>
+
+  <div class="note">
+    Tip: a plain <code>pytest</code> / <code>npx playwright test</code> runs only the
+    worked reference suite (14 tests per stack). Exercise skeletons fail on purpose
+    until you implement them — that's the "make it green" loop.
+  </div>
+
+</div>
+
+<footer>
+  Playwright Automation Practice · Python + TypeScript ·
+  see <code>README.md</code> and <code>SETUP.md</code> for full docs.
+</footer>
+</body>
+</html>

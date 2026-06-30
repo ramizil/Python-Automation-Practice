@@ -14,7 +14,7 @@ A learning repo with **two mirrored stacks** teaching the same automation topics
 - `python-playwright/` — pytest + `pytest-playwright`
 - `ts-playwright/` — `@playwright/test`
 
-Topics 01–08 and 10 are complete (worked example + exercise skeleton +
+Topics 01–08, 10, and 12 are complete (worked example + exercise skeleton +
 solution); **09 (hybrid) and 11 (Parabank capstone) are still `EXERCISE.md`
 stubs** to flesh out. Always implement a topic in **both** stacks to keep them
 mirrored.
@@ -24,6 +24,12 @@ Reusable framework pieces added for the newer topics:
   Ajv `validateOrThrow`) — topic 07.
 - `framework/mock_app.py` / `src/mockApp.ts` (`PRODUCTS_APP_HTML` +
   `PRODUCTS_URL_GLOB`, a `set_content` app for `page.route` practice) — topic 08.
+- **Layered architecture (topic 12)** — `framework/core/` & `src/core/`
+  (Layer 1: `get_logger`, `BaseApiClient` = auth + request/response logging
+  interceptor) and `framework/products/` & `src/products/` (Layer 2: per-product
+  `saucedemo` steps, `booker` client+steps). Tests in `tests/*layered*` are
+  Layer 3. The flat topics 01–08 are intentionally NOT refactored — topic 12 is
+  the layered showcase. See root `ARCHITECTURE.md`.
 
 ## Targets (free public demo sites)
 - SauceDemo `https://www.saucedemo.com` — UI store (login/cart/checkout)
@@ -83,7 +89,7 @@ cd python-playwright
 Install these with `pip install -r requirements-dev.txt`. Keep `framework/`
 ruff- and mypy-clean when you edit it.
 
-Expected baseline: **21 reference tests pass per stack** (7 API + 14 UI).
+Expected baseline: **23 reference tests pass per stack** (8 API + 15 UI).
 Solutions pass; skeletons fail with a `TODO` until implemented.
 
 ## Adding a new topic / fleshing a stub

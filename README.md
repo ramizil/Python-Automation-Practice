@@ -57,6 +57,7 @@ fixtures) is the scaffolding you'll extend.
 | 09 | Hybrid UI + API (seed then verify) | restful-booker + UI | 🔜 stub |
 | 10 | Reporting, quality gates & CI | both | ✅ ready |
 | 11 | Capstone: bank flow end-to-end | Parabank | 🔜 stub |
+| 12 | Layered framework architecture | SauceDemo + restful-booker | ✅ ready |
 
 ## Quick start
 
@@ -127,6 +128,14 @@ pip install pre-commit && pre-commit install
 - `.pre-commit-config.yaml` — git hooks
 - `.github/workflows/ci.yml` — runs **lint**, **python-tests**, and **ts-tests**
   on every push/PR and uploads reports as artifacts
+
+## Framework architecture (topic 12)
+
+Topics 01–08 use a flat Page Object Model (good while learning). **Topic 12**
+shows the 3-layer design real frameworks use — **infrastructure → business steps
+→ tests** — with a shared `core/` (config, logging, `BaseApiClient` auth/logging
+interceptor) and per-product `products/` packages. Full write-up in
+**[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ## How to work through it
 

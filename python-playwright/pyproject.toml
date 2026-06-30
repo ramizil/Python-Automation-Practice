@@ -1,0 +1,35 @@
+# Tooling config for the Python stack: ruff (lint + format) and mypy (types).
+# These are *quality gates* — they teach clean-code habits and catch bugs before
+# you run anything. Install them with:  pip install -r requirements-dev.txt
+#
+#   ruff check .        # lint
+#   ruff format .       # auto-format
+#   mypy framework      # type-check the reusable framework
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+# Exercise skeletons intentionally import things they don't use yet (the learner
+# wires them up), so don't nag about unused imports there.
+extend-exclude = ["exercises/**/test_*.py"]
+
+[tool.ruff.lint]
+# A pragmatic, beginner-friendly rule set:
+#   E,F = pyflakes + pycodestyle (real errors), I = import sorting,
+#   B = bugbear (likely bugs), UP = pyupgrade (modernize syntax)
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may keep unused fixture args and re-import for readability.
+"tests/**" = ["F811"]
+"exercises/**" = ["F401", "F811"]
+
+[tool.mypy]
+python_version = "3.10"
+# Start lenient so the framework type-checks cleanly without forcing annotations
+# on every test. Tighten (e.g. disallow_untyped_defs) as you grow comfortable.
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+# Only the reusable framework is type-checked in CI (tests stay flexible).
+files = ["framework"]

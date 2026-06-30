@@ -1,4 +1,5 @@
 """SauceDemo checkout pages (information form + overview + completion)."""
+
 from __future__ import annotations
 
 from playwright.sync_api import Page

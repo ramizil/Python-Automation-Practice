@@ -3,6 +3,7 @@
 Notice how the test reads as intent only - selectors live in LoginPage.
     pytest tests/ui/test_pom_login.py
 """
+
 import pytest
 from playwright.sync_api import Page, expect
 

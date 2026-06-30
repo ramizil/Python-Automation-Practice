@@ -1,6 +1,7 @@
 """Topic 4 (worked example): full end-to-end checkout flow with page objects.
-    pytest tests/ui/test_checkout.py
+pytest tests/ui/test_checkout.py
 """
+
 import pytest
 from playwright.sync_api import Page, expect
 
@@ -16,8 +17,7 @@ ITEM = "Sauce Labs Backpack"
 
 
 def test_buy_one_item_end_to_end(page: Page, base_url: str):
-    LoginPage(page).open(base_url).login(
-        config.SAUCE_USERS["standard"], config.SAUCE_PASSWORD)
+    LoginPage(page).open(base_url).login(config.SAUCE_USERS["standard"], config.SAUCE_PASSWORD)
 
     inventory = InventoryPage(page)
     inventory.add_item_to_cart(ITEM)

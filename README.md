@@ -52,10 +52,10 @@ fixtures) is the scaffolding you'll extend.
 | 04 | End-to-end checkout flow | SauceDemo | ✅ ready |
 | 05 | Data-driven tests | SauceDemo | ✅ ready |
 | 06 | API testing basics (auth + CRUD) | restful-booker | ✅ ready |
-| 07 | API schema / contract validation | restful-booker | 🔜 stub |
-| 08 | Network mocking & interception | DummyJSON | 🔜 stub |
+| 07 | API schema / contract validation | restful-booker | ✅ ready |
+| 08 | Network mocking & interception | DummyJSON | ✅ ready |
 | 09 | Hybrid UI + API (seed then verify) | restful-booker + UI | 🔜 stub |
-| 10 | Reporting + GitHub Actions CI | both | 🔜 stub |
+| 10 | Reporting, quality gates & CI | both | ✅ ready |
 | 11 | Capstone: bank flow end-to-end | Parabank | 🔜 stub |
 
 ## Quick start
@@ -106,6 +106,27 @@ npx playwright test
 ```
 
 See each stack's own `README.md` for details and how to run individual exercises.
+
+## Quality gates & CI (topic 10)
+
+The repo is wired like a real project:
+
+```bash
+# Python clean-code gates (from python-playwright/, venv activated)
+pip install -r requirements-dev.txt
+ruff format --check .     # formatting
+ruff check .              # linting
+mypy framework            # type checking
+pytest tests --html=report.html --self-contained-html   # HTML report
+
+# Pre-commit (run from repo root) formats/lints before every commit
+pip install pre-commit && pre-commit install
+```
+
+- `python-playwright/pyproject.toml` — ruff + mypy config
+- `.pre-commit-config.yaml` — git hooks
+- `.github/workflows/ci.yml` — runs **lint**, **python-tests**, and **ts-tests**
+  on every push/PR and uploads reports as artifacts
 
 ## How to work through it
 

@@ -1,0 +1,7 @@
+# Developer / CI tooling (not needed just to run tests, but recommended).
+#   pip install -r requirements-dev.txt
+-r requirements.txt
+
+ruff==0.8.4          # fast linter + formatter (replaces flake8/black/isort)
+mypy==1.13.0         # static type checker
+pytest-html==4.1.1   # self-contained HTML test report (--html=report.html)

@@ -1,6 +1,7 @@
 """Topic 5 (worked example): data-driven tests via pytest.mark.parametrize.
-    pytest tests/ui/test_login_data_driven.py
+pytest tests/ui/test_login_data_driven.py
 """
+
 import pytest
 from playwright.sync_api import Page, expect
 

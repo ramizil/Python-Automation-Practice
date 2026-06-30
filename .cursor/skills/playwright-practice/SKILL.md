@@ -14,9 +14,16 @@ A learning repo with **two mirrored stacks** teaching the same automation topics
 - `python-playwright/` — pytest + `pytest-playwright`
 - `ts-playwright/` — `@playwright/test`
 
-Topics 01–06 are complete (worked example + exercise skeleton + solution);
-07–11 are `EXERCISE.md` stubs to flesh out. Always implement a topic in **both**
-stacks to keep them mirrored.
+Topics 01–08 and 10 are complete (worked example + exercise skeleton +
+solution); **09 (hybrid) and 11 (Parabank capstone) are still `EXERCISE.md`
+stubs** to flesh out. Always implement a topic in **both** stacks to keep them
+mirrored.
+
+Reusable framework pieces added for the newer topics:
+- `framework/schemas/booking.py` / `src/schemas/booking.ts` (JSON Schema +
+  Ajv `validateOrThrow`) — topic 07.
+- `framework/mock_app.py` / `src/mockApp.ts` (`PRODUCTS_APP_HTML` +
+  `PRODUCTS_URL_GLOB`, a `set_content` app for `page.route` practice) — topic 08.
 
 ## Targets (free public demo sites)
 - SauceDemo `https://www.saucedemo.com` — UI store (login/cart/checkout)
@@ -62,11 +69,21 @@ cd ts-playwright
 npx playwright test --reporter=list                   # reference suite must be green
 npx playwright test -c playwright.exercises.config.ts 06_api_basics/solution
 ```
-First-time setup if `.venv`/`node_modules` are missing: run `./setup.ps1`
-(Windows) or `bash setup.sh` (macOS/Linux) from the repo root, which sets up
-both stacks. Full cross-platform prerequisites are in `SETUP.md`.
+First-time setup if `.venv`/`node_modules` are missing: run `python install.py`
+from the repo root (cross-platform, both stacks), or the `./setup.ps1` /
+`bash setup.sh` wrappers. Full prerequisites are in `SETUP.md`.
 
-Expected baseline: **14 reference tests pass per stack** (4 API + 10 UI).
+Quality gates (topic 10) must also pass — CI (`.github/workflows/ci.yml`) runs:
+```bash
+cd python-playwright
+.venv\Scripts\python.exe -m ruff format --check .
+.venv\Scripts\python.exe -m ruff check .
+.venv\Scripts\python.exe -m mypy framework      # config in pyproject.toml
+```
+Install these with `pip install -r requirements-dev.txt`. Keep `framework/`
+ruff- and mypy-clean when you edit it.
+
+Expected baseline: **21 reference tests pass per stack** (7 API + 14 UI).
 Solutions pass; skeletons fail with a `TODO` until implemented.
 
 ## Adding a new topic / fleshing a stub
@@ -91,15 +108,11 @@ case, and tick the status table in the **root `README.md`**.
 **Steps** (numbered), **Hints**, **Run it** (exact command), **Done when**.
 
 ### Remaining stubs and their key APIs
-- **07 schema/contract**: Python `jsonschema.validate`; TS `zod`/`ajv`. Validate
-  a restful-booker booking's shape, not just values.
-- **08 mocking**: `page.route('**/products*', route => route.fulfill({json}))`,
-  `route.abort()`, `route.fetch()` then modify. Target DummyJSON; set the route
-  before navigation.
 - **09 hybrid**: seed via the `booker` API client/fixture, assert in UI; tear
-  down in a fixture (`yield`/`use` then delete).
-- **10 reporting/CI**: Python `pytest-html` + `--tracing`; TS HTML reporter is
-  already on. Add `.github/workflows/*.yml` (`playwright install --with-deps`).
+  down in a fixture (`yield`/`use` then delete). Note: SauceDemo has no API and
+  restful-booker has no UI, so a true same-data UI+API flow needs Parabank — for
+  09 teach the **fixture seed/teardown pattern** (create-by-API, assert, delete
+  in teardown), or fold it into the capstone.
 - **11 capstone (Parabank)**: page objects `RegisterPage`, `LoginPage`,
   `AccountsOverviewPage`, `OpenAccountPage`, `TransferFundsPage` + a REST client;
   fixture that registers a unique user per run; verify account/transfer via UI

@@ -3,6 +3,7 @@
 Covers: auth token, create, read, update (auth'd), delete (auth'd).
     pytest tests/api/test_booker.py
 """
+
 import pytest
 
 from framework import config

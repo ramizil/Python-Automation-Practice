@@ -1,0 +1,72 @@
+# Continuous Integration: runs on every push and pull request.
+# Three jobs run in parallel:
+#   lint        - ruff (format + lint) and mypy on the Python framework
+#   python-tests- the pytest reference suite (+ HTML report artifact)
+#   ts-tests    - the Playwright TypeScript reference suite (+ report artifact)
+#
+# Browsers are installed with `--with-deps` so Chromium has its system libraries
+# on the Ubuntu runners.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python-playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - run: ruff format --check .
+      - run: ruff check .
+      - run: mypy framework
+
+  python-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python-playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - run: python -m playwright install --with-deps chromium
+      - run: pytest tests --html=report.html --self-contained-html
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: python-report
+          path: |
+            python-playwright/report.html
+            python-playwright/test-results/
+
+  ts-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ts-playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ts-playwright/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: ts-report
+          path: ts-playwright/playwright-report/

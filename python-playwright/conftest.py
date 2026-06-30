@@ -6,6 +6,7 @@ session-scoped ``playwright`` instance. We add:
 - ``booker_request`` -> a Playwright APIRequestContext pointed at restful-booker
 - ``booker`` -> a ready-to-use BookerClient
 """
+
 from __future__ import annotations
 
 import pytest

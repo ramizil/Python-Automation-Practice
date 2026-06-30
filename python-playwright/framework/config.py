@@ -3,6 +3,7 @@
 Values can be overridden with environment variables (or a local .env file),
 which is how real frameworks switch between dev/staging/prod.
 """
+
 from __future__ import annotations
 
 import os
